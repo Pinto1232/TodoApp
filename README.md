@@ -44,8 +44,39 @@ This project follows Clean Architecture with clear separation of concerns:
 
 ```bash
 cd TodoApp
+
+# Install root dependencies (concurrently)
 npm install
+
+# Install frontend and backend dependencies
+npm run install:all
+
+# Or install each separately
+cd frontend && npm install
+cd ../backend && npm install
 ```
+
+## 📦 Project Structure
+
+This project uses a **monorepo structure** with isolated dependencies:
+
+```
+TodoApp/
+├── package.json         # Root coordinator (concurrently for running both servers)
+├── node_modules/        # Minimal root dependencies (~30 packages)
+├── frontend/
+│   ├── package.json     # Frontend dependencies
+│   └── node_modules/    # Frontend packages (isolated)
+└── backend/
+    ├── package.json     # Backend dependencies
+    └── node_modules/    # Backend packages (isolated)
+```
+
+**Why this structure?**
+- Each project manages its own dependencies independently
+- Clearer isolation between frontend and backend
+- Follows industry standard for monorepos
+- Root `package.json` provides convenience scripts to run both servers
 
 ### Development
 

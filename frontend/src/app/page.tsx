@@ -12,14 +12,9 @@ export default function Home() {
         </div>
 
         <div className="bg-white rounded-xl shadow-lg p-6">
-          <p className="text-gray-500 text-center mb-4">
+          <p className="text-gray-500 text-center">
             Start building your features here!
           </p>
-          <div className="flex justify-center">
-            <button className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg transition-colors duration-200">
-              Test Button
-            </button>
-          </div>
         </div>
       </div>
     </main>
