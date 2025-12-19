@@ -1,5 +1,0 @@
-# Infrastructure Layer
-# This layer contains:
-# - repositories/ : Repository implementations (database, API, etc.)
-# - database/     : Database connections and migrations
-# - services/     : External service integrations

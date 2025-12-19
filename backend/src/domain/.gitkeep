@@ -1,6 +1,0 @@
-# Domain Layer
-# This layer contains:
-# - entities/     : Business entities (e.g., User, Product, Order)
-# - repositories/ : Repository interfaces (abstractions)
-# - value-objects/: Immutable value objects
-# - errors/       : Domain-specific errors
