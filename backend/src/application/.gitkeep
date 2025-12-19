@@ -1,0 +1,6 @@
+# Application Layer
+# This layer contains:
+# - usecases/   : Business logic use cases
+# - dtos/       : Data Transfer Objects
+# - interfaces/ : Use case interfaces
+# - services/   : Application services

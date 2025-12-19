@@ -1,0 +1,6 @@
+# Shared Layer
+# This layer contains:
+# - container.ts : Dependency Injection container
+# - utils/       : Utility functions
+# - constants/   : Application constants
+# - types/       : Shared TypeScript types

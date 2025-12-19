@@ -1,0 +1,5 @@
+# Application Layer
+# This layer contains:
+# - hooks/    : Custom React hooks for business logic
+# - services/ : Application services
+# - context/  : React Context providers

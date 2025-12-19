@@ -1,0 +1,5 @@
+# Presentation Layer
+# This layer contains:
+# - components/ : Reusable UI components
+# - layouts/    : Page layouts
+# - styles/     : Component-specific styles
