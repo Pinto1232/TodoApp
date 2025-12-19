@@ -50,13 +50,37 @@ npm install
 ### Development
 
 ```bash
-# Run both frontend and backend
+# Run both frontend and backend concurrently
 npm run dev
-
-# Or run separately
-npm run dev:frontend
-npm run dev:backend
 ```
+
+### Running Backend Only
+
+```bash
+# From the project root
+npm run dev:backend
+
+# Or navigate to backend folder
+cd backend
+npm run dev
+```
+
+The backend server will start at **http://localhost:3001**
+
+### Running Frontend Only
+
+```bash
+# From the project root
+npm run dev:frontend
+
+# Or navigate to frontend folder
+cd frontend
+npm run dev
+```
+
+The frontend will start at **http://localhost:3000**
+
+### URLs
 
 - **Frontend**: http://localhost:3000
 - **Backend**: http://localhost:3001
