@@ -111,13 +111,15 @@ export function TodoItem({ todo, onToggle, onDelete, onUpdate }: TodoItemProps) 
             <EditIcon className="w-5 h-5" />
           </button>
         )}
-        <button
-          onClick={() => onDelete(todo.id)}
-          className="text-red-300 hover:text-red-500 transition-colors"
-          aria-label="Delete todo"
-        >
-          <TrashIcon className="w-5 h-5" />
-        </button>
+        {todo.completed && (
+          <button
+            onClick={() => onDelete(todo.id)}
+            className="text-red-300 hover:text-red-500 transition-colors"
+            aria-label="Delete todo"
+          >
+            <TrashIcon className="w-5 h-5" />
+          </button>
+        )}
       </div>
     </div>
   );
