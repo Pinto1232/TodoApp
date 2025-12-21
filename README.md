@@ -10,10 +10,12 @@ This project follows Clean Architecture with a **unified core** approach, where 
 TodoApp/
 ├── .gitignore
 ├── README.md
-├── package-lock.json
 └── core/                           # Unified application core
     ├── package.json                # Backend dependencies & scripts
     ├── tsconfig.json               # TypeScript configuration
+    ├── jest.config.js              # Jest test configuration
+    ├── .env                        # Environment variables (create from .env.example)
+    ├── .env.example                # Environment template
     └── src/
         ├── app.ts                  # Express application setup
         ├── index.ts                # Server entry point
@@ -64,6 +66,7 @@ TodoApp/
 ### Prerequisites
 - Node.js >= 18.0.0
 - npm
+- OpenWeatherMap API key (free tier available at [openweathermap.org](https://openweathermap.org/api))
 
 ### Installation
 
@@ -78,6 +81,23 @@ npm install
 # Install frontend dependencies
 cd src/presentation/frontend
 npm install
+```
+
+### Environment Setup
+
+Create a `.env` file in the `core/` directory:
+
+```bash
+cd core
+cp .env.example .env
+```
+
+Then edit `.env` and add your OpenWeatherMap API key:
+
+```env
+PORT=3001
+NODE_ENV=development
+OPENWEATHERMAP_API_KEY=your_actual_api_key_here
 ```
 
 ## 📦 Running the Application
@@ -103,8 +123,69 @@ The frontend will start at **http://localhost:3000**
 ### URLs
 
 - **Frontend**: http://localhost:3000
-- **Backend**: http://localhost:3001
+- **Backend API**: http://localhost:3001
+- **API Documentation (Swagger)**: http://localhost:3001/api/docs
 - **Health Check**: http://localhost:3001/api/health
+
+## 🧪 Testing
+
+Run the test suite from the `core/` directory:
+
+```bash
+cd core
+npm test
+```
+
+**Test Coverage:**
+- 65 tests across 5 test suites
+- Domain entities (Todo)
+- Application use cases (TodoUseCases, WeatherUseCases)
+- Infrastructure (InMemoryStore, TodoRepository)
+
+## 📡 API Endpoints
+
+### Health Check
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/health` | Check API health status |
+
+### Todos
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/todos` | Get all todos |
+| GET | `/api/todos/:id` | Get a specific todo |
+| POST | `/api/todos` | Create a new todo |
+| PUT | `/api/todos/:id` | Update a todo |
+| DELETE | `/api/todos/:id` | Delete a todo |
+
+**Request Body (POST/PUT):**
+```json
+{
+  "text": "Todo description",
+  "completed": false
+}
+```
+
+### Weather
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/weather?city=Cape Town` | Get weather by city name |
+| GET | `/api/weather?lat=-33.9&lon=18.4` | Get weather by coordinates |
+
+**Response:**
+```json
+{
+  "location": "Cape Town",
+  "country": "ZA",
+  "temperature": 22.5,
+  "feelsLike": 21.0,
+  "humidity": 65,
+  "description": "Clear sky",
+  "icon": "01d",
+  "windSpeed": 5.2,
+  "timestamp": "2024-01-15T10:00:00Z"
+}
+```
 
 ## 📁 Building Features Step by Step
 
