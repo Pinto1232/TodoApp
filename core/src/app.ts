@@ -1,5 +1,6 @@
 import express, { Application, Request, Response } from 'express';
 import cors from 'cors';
+import { todoRoutes } from './presentation';
 
 export const createApp = (): Application => {
   const app = express();
@@ -17,8 +18,8 @@ export const createApp = (): Application => {
     res.status(200).json({ status: 'OK', timestamp: new Date().toISOString() });
   });
 
-  // TODO: Add your routes here
-  // Example: app.use('/api/todos', todoRoutes);
+  // Routes
+  app.use('/api/todos', todoRoutes);
 
   // 404 handler
   app.use((_req: Request, res: Response) => {

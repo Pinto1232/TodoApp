@@ -5,3 +5,4 @@
  * These abstractions define contracts that infrastructure layer implements.
  */
 export * from './IDataStore';
+export * from './ITodoRepository';
