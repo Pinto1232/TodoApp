@@ -1,19 +1,61 @@
 import express, { Application, Request, Response } from 'express';
 import cors from 'cors';
+import helmet from 'helmet';
+import rateLimit from 'express-rate-limit';
 import swaggerUi from 'swagger-ui-express';
 import { todoRoutes, weatherRoutes } from './presentation';
-import { swaggerSpec } from './shared';
+import { swaggerSpec, getConfig, createLogger } from './shared';
+
+const logger = createLogger('App');
 
 export const createApp = (): Application => {
   const app = express();
+  const config = getConfig();
 
-  // Middleware
+  // Security Middleware - Helmet sets various HTTP headers for security
+  app.use(helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        styleSrc: ["'self'", "'unsafe-inline'"],
+        scriptSrc: ["'self'"],
+        imgSrc: ["'self'", 'data:', 'https:'],
+      },
+    },
+    crossOriginEmbedderPolicy: false, // Allow embedding for Swagger UI
+  }));
+
+  // Rate Limiting - Protect against brute force and DDoS
+  const limiter = rateLimit({
+    windowMs: config.rateLimit.windowMs,
+    max: config.rateLimit.maxRequests,
+    message: {
+      success: false,
+      error: 'Too many requests, please try again later.',
+    },
+    standardHeaders: true,
+    legacyHeaders: false,
+  });
+  app.use('/api', limiter);
+
+  // CORS
   app.use(cors({
-    origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+    origin: config.server.frontendUrl,
     credentials: true,
   }));
+
+  // Body Parsing
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
+
+  // Request Logging
+  app.use((req: Request, _res: Response, next) => {
+    logger.debug(`${req.method} ${req.path}`, {
+      query: req.query,
+      ip: req.ip,
+    });
+    next();
+  });
 
   // Swagger Documentation
   app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {

@@ -1,0 +1,3 @@
+cd core
+npx lint-staged
+npm test
