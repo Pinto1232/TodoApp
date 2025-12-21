@@ -122,9 +122,7 @@ describe('TodoRepository', () => {
       // Small delay to ensure different timestamp
       const updated = repository.update(todo.id, { text: 'Updated' });
 
-      expect(updated?.updatedAt.getTime()).toBeGreaterThanOrEqual(
-        originalUpdatedAt.getTime()
-      );
+      expect(updated?.updatedAt.getTime()).toBeGreaterThanOrEqual(originalUpdatedAt.getTime());
     });
 
     it('should preserve other fields when updating', () => {

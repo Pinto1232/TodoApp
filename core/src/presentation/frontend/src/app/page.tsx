@@ -25,7 +25,6 @@ export default function Home() {
     todoText: '',
   });
 
-  // Fetch todos from API
   const fetchTodos = useCallback(async () => {
     try {
       setIsLoading(true);
@@ -33,23 +32,18 @@ export default function Home() {
       const response = await fetch(`${API_BASE_URL}/todos`);
       if (!response.ok) throw new Error('Failed to fetch todos');
       const result = await response.json();
-      // API returns { success, data, count } wrapper
       setTodos(result.data || []);
-      console.log('📋 Todos loaded:', result.data);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load todos');
-      console.error('❌ Error fetching todos:', err);
     } finally {
       setIsLoading(false);
     }
   }, []);
 
-  // Load todos on mount
   useEffect(() => {
     fetchTodos();
   }, [fetchTodos]);
 
-  // Add todo via API
   const addTodo = async (text: string) => {
     try {
       const response = await fetch(`${API_BASE_URL}/todos`, {
@@ -60,14 +54,11 @@ export default function Home() {
       if (!response.ok) throw new Error('Failed to add todo');
       const result = await response.json();
       setTodos((prev) => [...prev, result.data]);
-      console.log('✅ Todo added:', result.data);
     } catch (err) {
-      console.error('❌ Error adding todo:', err);
       setError(err instanceof Error ? err.message : 'Failed to add todo');
     }
   };
 
-  // Toggle todo via API
   const toggleTodo = async (id: string) => {
     const todo = todos.find((t) => t.id === id);
     if (!todo) return;
@@ -83,14 +74,11 @@ export default function Home() {
       setTodos((prev) =>
         prev.map((t) => (t.id === id ? result.data : t))
       );
-      console.log('✅ Todo toggled:', result.data);
     } catch (err) {
-      console.error('❌ Error toggling todo:', err);
       setError(err instanceof Error ? err.message : 'Failed to update todo');
     }
   };
 
-  // Update todo text via API
   const updateTodo = async (id: string, text: string) => {
     try {
       const response = await fetch(`${API_BASE_URL}/todos/${id}`, {
@@ -103,21 +91,17 @@ export default function Home() {
       setTodos((prev) =>
         prev.map((t) => (t.id === id ? result.data : t))
       );
-      console.log('✏️ Todo updated:', result.data);
     } catch (err) {
-      console.error('❌ Error updating todo:', err);
       setError(err instanceof Error ? err.message : 'Failed to update todo');
     }
   };
 
-  // Delete todo via API
   const deleteTodo = (id: string) => {
     const todo = todos.find((t) => t.id === id);
     if (!todo) return;
     setDeleteConfirm({ isOpen: true, todoId: id, todoText: todo.text });
   };
 
-  // Confirm delete
   const confirmDelete = async () => {
     const id = deleteConfirm.todoId;
     if (!id) return;
@@ -128,21 +112,17 @@ export default function Home() {
       });
       if (!response.ok) throw new Error('Failed to delete todo');
       setTodos((prev) => prev.filter((t) => t.id !== id));
-      console.log('🗑️ Todo deleted:', id);
     } catch (err) {
-      console.error('❌ Error deleting todo:', err);
       setError(err instanceof Error ? err.message : 'Failed to delete todo');
     } finally {
       setDeleteConfirm({ isOpen: false, todoId: null, todoText: '' });
     }
   };
 
-  // Cancel delete
   const cancelDelete = () => {
     setDeleteConfirm({ isOpen: false, todoId: null, todoText: '' });
   };
 
-  // Reorder todos by drag and drop
   const reorderTodos = (activeId: string, overId: string) => {
     setTodos((prev) => {
       const oldIndex = prev.findIndex((t) => t.id === activeId);
@@ -154,7 +134,6 @@ export default function Home() {
       const [removed] = newTodos.splice(oldIndex, 1);
       newTodos.splice(newIndex, 0, removed);
 
-      console.log('🔄 Todos reordered');
       return newTodos;
     });
   };

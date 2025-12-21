@@ -3,9 +3,9 @@ import { IWeatherService } from '../../domain/repositories/IWeatherService';
 
 /**
  * Get Weather Use Case
- * 
+ *
  * Application layer use case for retrieving weather data.
- * 
+ *
  * Follows: Single Responsibility Principle (SRP)
  */
 export class GetWeatherUseCase {

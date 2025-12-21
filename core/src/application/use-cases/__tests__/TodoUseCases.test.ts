@@ -66,7 +66,9 @@ describe('Todo Use Cases', () => {
 
     it('should propagate repository errors', () => {
       const error = new Error('Database error');
-      mockRepository.findAll.mockImplementation(() => { throw error; });
+      mockRepository.findAll.mockImplementation(() => {
+        throw error;
+      });
       const useCase = new GetTodosUseCase(mockRepository);
 
       expect(() => useCase.execute()).toThrow('Database error');
@@ -105,13 +107,15 @@ describe('Todo Use Cases', () => {
       useCase.execute({ text: '  Test Todo  ' });
 
       expect(mockRepository.create).toHaveBeenCalledWith(
-        expect.objectContaining({ text: 'Test Todo' })
+        expect.objectContaining({ text: 'Test Todo' }),
       );
     });
 
     it('should propagate repository errors', () => {
       const error = new Error('Failed to create');
-      mockRepository.create.mockImplementation(() => { throw error; });
+      mockRepository.create.mockImplementation(() => {
+        throw error;
+      });
       const useCase = new CreateTodoUseCase(mockRepository);
 
       expect(() => useCase.execute({ text: 'Test' })).toThrow('Failed to create');
@@ -140,9 +144,7 @@ describe('Todo Use Cases', () => {
     it('should throw error when id is empty', () => {
       const useCase = new UpdateTodoUseCase(mockRepository);
 
-      expect(() => useCase.execute('', { text: 'Test' })).toThrow(
-        'Todo ID is required'
-      );
+      expect(() => useCase.execute('', { text: 'Test' })).toThrow('Todo ID is required');
       expect(mockRepository.update).not.toHaveBeenCalled();
     });
 
@@ -150,9 +152,7 @@ describe('Todo Use Cases', () => {
       mockRepository.findById.mockReturnValue(mockTodo);
       const useCase = new UpdateTodoUseCase(mockRepository);
 
-      expect(() => useCase.execute('test-id', { text: '' })).toThrow(
-        'Todo text cannot be empty'
-      );
+      expect(() => useCase.execute('test-id', { text: '' })).toThrow('Todo text cannot be empty');
       expect(mockRepository.update).not.toHaveBeenCalled();
     });
 
@@ -161,7 +161,7 @@ describe('Todo Use Cases', () => {
       const useCase = new UpdateTodoUseCase(mockRepository);
 
       expect(() => useCase.execute('test-id', { text: '   ' })).toThrow(
-        'Todo text cannot be empty'
+        'Todo text cannot be empty',
       );
       expect(mockRepository.update).not.toHaveBeenCalled();
     });
@@ -192,12 +192,12 @@ describe('Todo Use Cases', () => {
     it('should propagate repository errors', () => {
       const error = new Error('Update failed');
       mockRepository.findById.mockReturnValue(mockTodo);
-      mockRepository.update.mockImplementation(() => { throw error; });
+      mockRepository.update.mockImplementation(() => {
+        throw error;
+      });
       const useCase = new UpdateTodoUseCase(mockRepository);
 
-      expect(() =>
-        useCase.execute('test-id', { text: 'Test' })
-      ).toThrow('Update failed');
+      expect(() => useCase.execute('test-id', { text: 'Test' })).toThrow('Update failed');
     });
   });
 
@@ -230,7 +230,9 @@ describe('Todo Use Cases', () => {
 
     it('should propagate repository errors', () => {
       const error = new Error('Delete failed');
-      mockRepository.delete.mockImplementation(() => { throw error; });
+      mockRepository.delete.mockImplementation(() => {
+        throw error;
+      });
       const useCase = new DeleteTodoUseCase(mockRepository);
 
       expect(() => useCase.execute('test-id')).toThrow('Delete failed');

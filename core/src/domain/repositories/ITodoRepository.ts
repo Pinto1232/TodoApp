@@ -2,10 +2,10 @@ import { Todo, CreateTodoDTO } from '../entities';
 
 /**
  * Todo Repository Interface
- * 
+ *
  * Defines the contract for Todo data operations.
  * Implementations can be in-memory, database, etc.
- * 
+ *
  * Follows: Dependency Inversion Principle (DIP)
  * Follows: Interface Segregation Principle (ISP)
  */

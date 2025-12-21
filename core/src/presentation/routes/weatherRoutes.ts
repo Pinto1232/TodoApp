@@ -4,18 +4,16 @@ import { OpenWeatherMapService } from '../../infrastructure/external';
 
 /**
  * Weather Routes
- * 
+ *
  * Presentation layer - HTTP routes for Weather API.
- * 
+ *
  * Follows: Single Responsibility Principle (SRP)
  */
 const router = Router();
 
-// Initialize service and use case
 const weatherService = new OpenWeatherMapService();
 const getWeatherUseCase = new GetWeatherUseCase(weatherService);
 
-// South African cities
 const SOUTH_AFRICAN_CITIES = [
   'Cape Town,ZA',
   'Johannesburg,ZA',
@@ -65,7 +63,7 @@ const SOUTH_AFRICAN_CITIES = [
 router.get('/', async (req: Request, res: Response) => {
   try {
     const { city } = req.query;
-    
+
     const weather = await getWeatherUseCase.execute({
       city: city as string | undefined,
     });
@@ -116,9 +114,7 @@ router.get('/', async (req: Request, res: Response) => {
  */
 router.get('/south-africa', async (_req: Request, res: Response) => {
   try {
-    const weatherPromises = SOUTH_AFRICAN_CITIES.map((city) =>
-      getWeatherUseCase.execute({ city })
-    );
+    const weatherPromises = SOUTH_AFRICAN_CITIES.map((city) => getWeatherUseCase.execute({ city }));
 
     const weatherData = await Promise.all(weatherPromises);
 
@@ -193,9 +189,7 @@ router.get('/multi', async (req: Request, res: Response) => {
     }
 
     const cityList = cities.split(',').map((c) => c.trim());
-    const weatherPromises = cityList.map((city) =>
-      getWeatherUseCase.execute({ city })
-    );
+    const weatherPromises = cityList.map((city) => getWeatherUseCase.execute({ city }));
 
     const weatherData = await Promise.all(weatherPromises);
 

@@ -47,9 +47,8 @@ export function WeatherSlider() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [direction, setDirection] = useState(1); // 1 for next, -1 for prev
+  const [direction, setDirection] = useState(1); 
 
-  // Fetch South Africa weather data
   useEffect(() => {
     const fetchWeather = async () => {
       try {
@@ -58,10 +57,8 @@ export function WeatherSlider() {
         if (!response.ok) throw new Error('Failed to fetch weather');
         const result = await response.json();
         setWeatherData(result.data || []);
-        console.log('🇿🇦 SA Weather loaded:', result.data);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to load weather');
-        console.error('❌ Error fetching weather:', err);
       } finally {
         setIsLoading(false);
       }
@@ -70,7 +67,6 @@ export function WeatherSlider() {
     fetchWeather();
   }, []);
 
-  // Auto-slide every 5 seconds
   useEffect(() => {
     if (weatherData.length === 0) return;
 
@@ -121,7 +117,6 @@ export function WeatherSlider() {
   const day = currentDate.getDate();
   const month = currentDate.toLocaleDateString('en-US', { month: 'long' });
 
-  // Slide animation variants
   const slideVariants = {
     enter: (direction: number) => ({
       x: direction > 0 ? 300 : -300,
@@ -140,7 +135,6 @@ export function WeatherSlider() {
     }),
   };
 
-  // Floating animation for weather emoji
   const floatVariants = {
     animate: {
       y: [0, -10, 0],
@@ -153,7 +147,6 @@ export function WeatherSlider() {
     },
   };
 
-  // Stagger animation for weather details
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {

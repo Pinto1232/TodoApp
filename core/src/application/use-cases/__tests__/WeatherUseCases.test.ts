@@ -86,9 +86,7 @@ describe('Weather Use Cases', () => {
       mockWeatherService.getCurrentWeather.mockRejectedValue(error);
       const useCase = new GetWeatherUseCase(mockWeatherService);
 
-      await expect(useCase.execute({ city: 'Invalid' })).rejects.toThrow(
-        'Weather API unavailable'
-      );
+      await expect(useCase.execute({ city: 'Invalid' })).rejects.toThrow('Weather API unavailable');
     });
 
     it('should handle network errors gracefully', async () => {
@@ -96,9 +94,7 @@ describe('Weather Use Cases', () => {
       mockWeatherService.getCurrentWeather.mockRejectedValue(networkError);
       const useCase = new GetWeatherUseCase(mockWeatherService);
 
-      await expect(useCase.execute({ city: 'Test' })).rejects.toThrow(
-        'Network error'
-      );
+      await expect(useCase.execute({ city: 'Test' })).rejects.toThrow('Network error');
     });
   });
 });

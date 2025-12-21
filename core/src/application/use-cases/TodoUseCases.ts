@@ -3,9 +3,9 @@ import { ITodoRepository } from '../../domain/repositories';
 
 /**
  * Get All Todos Use Case
- * 
+ *
  * Application layer use case for retrieving all todos.
- * 
+ *
  * Follows: Single Responsibility Principle (SRP)
  */
 export class GetTodosUseCase {
@@ -18,9 +18,9 @@ export class GetTodosUseCase {
 
 /**
  * Create Todo Use Case
- * 
+ *
  * Application layer use case for creating a new todo.
- * 
+ *
  * Follows: Single Responsibility Principle (SRP)
  */
 export class CreateTodoUseCase {
@@ -36,9 +36,9 @@ export class CreateTodoUseCase {
 
 /**
  * Update Todo Use Case
- * 
+ *
  * Application layer use case for updating an existing todo.
- * 
+ *
  * Follows: Single Responsibility Principle (SRP)
  */
 export interface UpdateTodoDTO {
@@ -78,9 +78,9 @@ export class UpdateTodoUseCase {
 
 /**
  * Delete Todo Use Case
- * 
+ *
  * Application layer use case for deleting a todo.
- * 
+ *
  * Follows: Single Responsibility Principle (SRP)
  */
 export class DeleteTodoUseCase {

@@ -1,17 +1,21 @@
 import { Router, Request, Response } from 'express';
-import { GetTodosUseCase, CreateTodoUseCase, UpdateTodoUseCase, DeleteTodoUseCase } from '../../application';
+import {
+  GetTodosUseCase,
+  CreateTodoUseCase,
+  UpdateTodoUseCase,
+  DeleteTodoUseCase,
+} from '../../application';
 import { TodoRepository } from '../../infrastructure/database';
 
 /**
  * Todo Routes
- * 
+ *
  * Presentation layer - HTTP routes for Todo API.
- * 
+ *
  * Follows: Single Responsibility Principle (SRP)
  */
 const router = Router();
 
-// Initialize repository and use cases
 const todoRepository = new TodoRepository();
 const getTodosUseCase = new GetTodosUseCase(todoRepository);
 const createTodoUseCase = new CreateTodoUseCase(todoRepository);

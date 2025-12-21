@@ -2,10 +2,10 @@ import { v4 as uuidv4 } from 'uuid';
 
 /**
  * Todo Entity
- * 
+ *
  * Core business entity representing a Todo item.
  * This is a pure domain object with no external dependencies.
- * 
+ *
  * Follows: Single Responsibility Principle (SRP)
  */
 export interface Todo {

@@ -1,5 +1,8 @@
 import { Weather, WeatherQueryDTO } from '../../domain/entities/Weather';
 import { IWeatherService } from '../../domain/repositories/IWeatherService';
+import { createLogger } from '../../shared';
+
+const logger = createLogger('WeatherService');
 
 /**
  * OpenWeatherMap API Response Types
@@ -25,9 +28,9 @@ interface OpenWeatherResponse {
 
 /**
  * OpenWeatherMap Service Implementation
- * 
+ *
  * Fetches weather data from OpenWeatherMap API.
- * 
+ *
  * Follows: Single Responsibility Principle (SRP)
  * Follows: Liskov Substitution Principle (LSP)
  */
@@ -56,10 +59,10 @@ export class OpenWeatherMapService implements IWeatherService {
         throw new Error(`Weather API error: ${response.status}`);
       }
 
-      const data = await response.json() as OpenWeatherResponse;
+      const data = (await response.json()) as OpenWeatherResponse;
       return this.mapToWeather(data);
     } catch (error) {
-      console.error('Failed to fetch weather from API, using mock data:', error);
+      logger.warn('Failed to fetch weather from API, using mock data', { error: String(error) });
       return this.getMockWeather(city);
     }
   }

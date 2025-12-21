@@ -1,6 +1,6 @@
 /**
  * Weather Entity
- * 
+ *
  * Core business entity representing weather data.
  * This is a pure domain object with no external dependencies.
  */

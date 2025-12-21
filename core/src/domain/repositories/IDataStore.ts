@@ -1,9 +1,9 @@
 /**
  * Generic Data Store Interface
- * 
+ *
  * This abstraction allows us to swap storage implementations
  * (in-memory, file, database) without changing business logic.
- * 
+ *
  * Follows: Dependency Inversion Principle (DIP)
  */
 export interface IDataStore<T> {

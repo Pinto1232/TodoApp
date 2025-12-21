@@ -125,13 +125,7 @@ export function resetConfig(): void {
 export function validateConfig(): void {
   const config = getConfig();
 
-  // Warn about missing optional but recommended config
   if (!config.weather.apiKey) {
-    console.warn('⚠️  OPENWEATHERMAP_API_KEY not set - weather feature will not work');
+    // Note: This will be logged by the caller
   }
-
-  console.log('✅ Configuration validated successfully');
-  console.log(`   Environment: ${config.server.nodeEnv}`);
-  console.log(`   Port: ${config.server.port}`);
-  console.log(`   Log Level: ${config.log.level}`);
 }

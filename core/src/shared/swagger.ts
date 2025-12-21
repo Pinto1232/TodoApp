@@ -2,7 +2,7 @@ import swaggerJsdoc from 'swagger-jsdoc';
 
 /**
  * Swagger Configuration
- * 
+ *
  * Configures OpenAPI 3.0 documentation for the API.
  */
 const options: swaggerJsdoc.Options = {
@@ -11,7 +11,8 @@ const options: swaggerJsdoc.Options = {
     info: {
       title: 'Todo App API',
       version: '1.0.0',
-      description: 'A RESTful API for managing todos and weather data, built with Clean Architecture principles.',
+      description:
+        'A RESTful API for managing todos and weather data, built with Clean Architecture principles.',
       contact: {
         name: 'API Support',
       },
