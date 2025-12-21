@@ -59,7 +59,7 @@ export function TodoItem({ todo, onToggle, onDelete, onUpdate }: TodoItemProps) 
     <div
       ref={setNodeRef}
       style={style}
-      className={`group flex items-center justify-between py-3 px-3 -mx-3 border-b border-[#d4d4d4] last:border-b-0 bg-[#F1ECE6] rounded-lg transition-all duration-300 ease-out cursor-pointer hover:bg-gradient-to-r hover:from-amber-50 hover:to-orange-50 hover:shadow-md hover:scale-[1.02] hover:border-amber-200 hover:-translate-y-0.5 ${isDragging ? 'z-10 shadow-lg scale-105' : ''}`}
+      className={`group flex items-center justify-between py-2 sm:py-3 px-2 sm:px-3 -mx-2 sm:-mx-3 border-b border-[#d4d4d4] last:border-b-0 bg-[#F1ECE6] rounded-lg transition-all duration-300 ease-out cursor-pointer hover:bg-gradient-to-r hover:from-amber-50 hover:to-orange-50 hover:shadow-md md:hover:scale-[1.02] hover:border-amber-200 md:hover:-translate-y-0.5 ${isDragging ? 'z-10 shadow-lg scale-105' : ''}`}
     >
       <div className="flex items-center gap-3 flex-1">
         <button

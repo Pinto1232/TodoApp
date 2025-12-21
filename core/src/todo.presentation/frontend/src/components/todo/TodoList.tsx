@@ -53,7 +53,7 @@ export function TodoList({
   };
 
   return (
-    <div className="bg-[#F1ECE6] rounded-xl p-4 mb-6 max-h-64 overflow-y-auto">
+    <div className="bg-[#F1ECE6] rounded-3xl p-3 sm:p-4 mb-4 sm:mb-6 max-h-48 sm:max-h-64 md:max-h-80 overflow-y-auto scrollbar-hide [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
       {todos.length > 0 ? (
         <DndContext
           sensors={sensors}

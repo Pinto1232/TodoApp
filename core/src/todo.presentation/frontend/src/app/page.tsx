@@ -96,9 +96,9 @@ export default function Home() {
   const displayError = error || mutationError;
 
   return (
-    <main className="min-h-screen bg-[#2d3748] p-4 md:p-8">
-      <div className="max-w-2xl mx-auto">
-        <div className="flex justify-between items-center mb-4">
+    <main className="min-h-screen bg-[#2d3748] p-4 sm:p-6 md:p-8 lg:p-12">
+      <div className="max-w-2xl lg:max-w-3xl mx-auto">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 sm:gap-0 mb-4">
           <PageHeader title="To-Do Personal" className="mb-0" />
           <button
             onClick={() => window.open('http://localhost:3001/api/docs', 'API Documentation', 'width=1200,height=800,menubar=no,toolbar=no,location=no,status=no')}
@@ -125,7 +125,7 @@ export default function Home() {
           </button>
         </div>
 
-        <Card variant="elevated" className="p-6 md:p-8">
+        <Card variant="elevated" className="p-4 sm:p-6 md:p-8 lg:p-10">
           <TodoInput onAdd={addTodo} disabled={addTodoMutation.isPending} />
 
           <TodoFilter

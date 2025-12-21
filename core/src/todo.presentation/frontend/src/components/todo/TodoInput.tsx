@@ -29,7 +29,7 @@ export function TodoInput({
   };
 
   return (
-    <div className="flex items-stretch bg-[#F1ECE6] rounded-xl overflow-hidden mb-4">
+    <div className="flex flex-col sm:flex-row items-stretch bg-[#F1ECE6] rounded-3xl overflow-hidden mb-4">
       <input
         type="text"
         value={inputValue}
@@ -37,12 +37,12 @@ export function TodoInput({
         onKeyPress={handleKeyPress}
         placeholder={placeholder}
         disabled={disabled}
-        className="flex-1 px-5 py-4 bg-transparent text-gray-700 placeholder-gray-400 focus:outline-none text-base disabled:opacity-50"
+        className="flex-1 px-4 sm:px-5 py-3 sm:py-4 bg-transparent text-gray-700 placeholder-gray-400 focus:outline-none text-sm sm:text-base disabled:opacity-50"
       />
       <button
         onClick={handleAdd}
         disabled={disabled}
-        className="px-6 bg-[#7fb3b5] hover:bg-[#6a9fa1] text-white font-semibold text-sm tracking-wide transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        className="px-6 py-3 sm:py-0 bg-[#7fb3b5] hover:bg-[#6a9fa1] text-white font-semibold text-sm tracking-wide transition-colors disabled:opacity-50 disabled:cursor-not-allowed sm:rounded-r-3xl"
       >
         ADD
       </button>

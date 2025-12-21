@@ -4,5 +4,5 @@ interface PageHeaderProps {
 }
 
 export function PageHeader({ title, className = '' }: PageHeaderProps) {
-  return <h1 className={`text-gray-400 text-sm mb-4 ${className}`}>{title}</h1>;
+  return <h1 className={`text-gray-400 text-xs sm:text-sm md:text-base mb-4 ${className}`}>{title}</h1>;
 }
