@@ -6,3 +6,4 @@
  */
 export * from './IDataStore';
 export * from './ITodoRepository';
+export * from './IWeatherService';

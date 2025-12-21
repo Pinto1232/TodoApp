@@ -1,6 +1,6 @@
 import express, { Application, Request, Response } from 'express';
 import cors from 'cors';
-import { todoRoutes } from './presentation';
+import { todoRoutes, weatherRoutes } from './presentation';
 
 export const createApp = (): Application => {
   const app = express();
@@ -20,6 +20,7 @@ export const createApp = (): Application => {
 
   // Routes
   app.use('/api/todos', todoRoutes);
+  app.use('/api/weather', weatherRoutes);
 
   // 404 handler
   app.use((_req: Request, res: Response) => {
