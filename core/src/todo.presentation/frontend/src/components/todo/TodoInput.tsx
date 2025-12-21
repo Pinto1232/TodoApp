@@ -5,11 +5,13 @@ import { useState, KeyboardEvent } from 'react';
 interface TodoInputProps {
   onAdd: (text: string) => void;
   placeholder?: string;
+  disabled?: boolean;
 }
 
 export function TodoInput({
   onAdd,
   placeholder = 'What do you need to do?',
+  disabled = false,
 }: TodoInputProps) {
   const [inputValue, setInputValue] = useState('');
 
@@ -34,11 +36,13 @@ export function TodoInput({
         onChange={(e) => setInputValue(e.target.value)}
         onKeyPress={handleKeyPress}
         placeholder={placeholder}
-        className="flex-1 px-5 py-4 bg-transparent text-gray-700 placeholder-gray-400 focus:outline-none text-base"
+        disabled={disabled}
+        className="flex-1 px-5 py-4 bg-transparent text-gray-700 placeholder-gray-400 focus:outline-none text-base disabled:opacity-50"
       />
       <button
         onClick={handleAdd}
-        className="px-6 bg-[#7fb3b5] hover:bg-[#6a9fa1] text-white font-semibold text-sm tracking-wide transition-colors"
+        disabled={disabled}
+        className="px-6 bg-[#7fb3b5] hover:bg-[#6a9fa1] text-white font-semibold text-sm tracking-wide transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
       >
         ADD
       </button>
