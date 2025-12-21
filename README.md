@@ -1,28 +1,53 @@
-# Todo App - Full Stack Clean Architecture
+# Todo App - Clean Architecture Monolith
 
-A full-stack Todo application built with **Next.js** (Frontend) and **Node.js/Express** (Backend), following **Clean Architecture** principles and **SOLID** design patterns.
+A full-stack Todo application built with **Next.js** (Frontend) and **Node.js/Express** (Backend), following **Clean Architecture** principles and **SOLID** design patterns in a unified core structure.
 
 ## 🏗️ Architecture Overview
 
-This project follows Clean Architecture with clear separation of concerns:
+This project follows Clean Architecture with a **unified core** approach, where all layers are organized under a single `core/` directory:
 
 ```
-├── frontend/                    # Next.js Frontend
-│   └── src/
-│       ├── app/                # Next.js App Router pages
-│       ├── domain/             # Business entities & repository interfaces
-│       ├── application/        # Custom hooks (use cases)
-│       ├── infrastructure/     # API repository implementations
-│       └── presentation/       # React components
-│
-├── backend/                    # Node.js Backend
-│   └── src/
-│       ├── domain/            # Business entities & repository interfaces
-│       ├── application/       # Use cases & DTOs
-│       ├── infrastructure/    # Repository implementations
-│       ├── presentation/      # Controllers, routes & middlewares
-│       └── shared/            # DI container & utilities
+TodoApp/
+├── .gitignore
+├── README.md
+├── package-lock.json
+└── core/                           # Unified application core
+    ├── package.json                # Backend dependencies & scripts
+    ├── tsconfig.json               # TypeScript configuration
+    └── src/
+        ├── app.ts                  # Express application setup
+        ├── index.ts                # Server entry point
+        │
+        ├── domain/                 # 🎯 Enterprise Business Rules
+        │   ├── entities/           # Business entities (Todo, User, etc.)
+        │   └── repositories/       # Repository interfaces (contracts)
+        │
+        ├── application/            # 🔧 Application Business Rules
+        │   └── use-cases/          # Use cases / interactors
+        │
+        ├── infrastructure/         # 🔌 Frameworks & Drivers
+        │   └── database/           # Data store implementations
+        │       └── InMemoryStore.ts
+        │
+        ├── presentation/           # 🖥️ Interface Adapters
+        │   └── frontend/           # Next.js Frontend Application
+        │       ├── package.json
+        │       ├── next.config.js
+        │       ├── tailwind.config.js
+        │       └── src/
+        │           └── app/        # Next.js App Router
+        │
+        └── shared/                 # 🛠️ Shared utilities & DI container
 ```
+
+### Clean Architecture Layers
+
+| Layer | Directory | Responsibility |
+|-------|-----------|----------------|
+| **Domain** | `core/src/domain/` | Business entities, repository interfaces |
+| **Application** | `core/src/application/` | Use cases, business logic orchestration |
+| **Infrastructure** | `core/src/infrastructure/` | Database, external services implementations |
+| **Presentation** | `core/src/presentation/` | UI (Next.js frontend), API controllers |
 
 ## 🎯 SOLID Principles
 
@@ -43,69 +68,33 @@ This project follows Clean Architecture with clear separation of concerns:
 ### Installation
 
 ```bash
+# Clone and navigate to the project
 cd TodoApp
 
-# Install root dependencies (concurrently)
+# Install backend dependencies
+cd core
 npm install
 
-# Install frontend and backend dependencies
-npm run install:all
-
-# Or install each separately
-cd frontend && npm install
-cd ../backend && npm install
+# Install frontend dependencies
+cd src/presentation/frontend
+npm install
 ```
 
-## 📦 Project Structure
+## 📦 Running the Application
 
-This project uses a **monorepo structure** with isolated dependencies:
-
-```
-TodoApp/
-├── package.json         # Root coordinator (concurrently for running both servers)
-├── node_modules/        # Minimal root dependencies (~30 packages)
-├── frontend/
-│   ├── package.json     # Frontend dependencies
-│   └── node_modules/    # Frontend packages (isolated)
-└── backend/
-    ├── package.json     # Backend dependencies
-    └── node_modules/    # Backend packages (isolated)
-```
-
-**Why this structure?**
-- Each project manages its own dependencies independently
-- Clearer isolation between frontend and backend
-- Follows industry standard for monorepos
-- Root `package.json` provides convenience scripts to run both servers
-
-### Development
+### Backend (Express API)
 
 ```bash
-# Run both frontend and backend concurrently
-npm run dev
-```
-
-### Running Backend Only
-
-```bash
-# From the project root
-npm run dev:backend
-
-# Or navigate to backend folder
-cd backend
+cd core
 npm run dev
 ```
 
 The backend server will start at **http://localhost:3001**
 
-### Running Frontend Only
+### Frontend (Next.js)
 
 ```bash
-# From the project root
-npm run dev:frontend
-
-# Or navigate to frontend folder
-cd frontend
+cd core/src/presentation/frontend
 npm run dev
 ```
 
@@ -119,32 +108,23 @@ The frontend will start at **http://localhost:3000**
 
 ## 📁 Building Features Step by Step
 
-### 1. Define Domain Entity (Backend)
-Create your entity in `backend/src/domain/entities/`
+### 1. Define Domain Entity
+Create your entity in `core/src/domain/entities/`
 
-### 2. Define Repository Interface (Backend)
-Create interface in `backend/src/domain/repositories/`
+### 2. Define Repository Interface
+Create interface in `core/src/domain/repositories/`
 
-### 3. Implement Use Case (Backend)
-Create business logic in `backend/src/application/usecases/`
+### 3. Implement Use Case
+Create business logic in `core/src/application/use-cases/`
 
-### 4. Implement Repository (Backend)
-Create implementation in `backend/src/infrastructure/repositories/`
+### 4. Implement Repository
+Create implementation in `core/src/infrastructure/database/`
 
-### 5. Create Controller & Routes (Backend)
-Add HTTP handlers in `backend/src/presentation/`
+### 5. Create Controller & Routes
+Add HTTP handlers in `core/src/presentation/` (for API endpoints)
 
-### 6. Mirror Types (Frontend)
-Create matching types in `frontend/src/domain/entities/`
-
-### 7. Create API Repository (Frontend)
-Implement API calls in `frontend/src/infrastructure/repositories/`
-
-### 8. Create Custom Hook (Frontend)
-Add state management in `frontend/src/application/hooks/`
-
-### 9. Build UI Components (Frontend)
-Create components in `frontend/src/presentation/components/`
+### 6. Build UI Components (Frontend)
+Create components in `core/src/presentation/frontend/src/`
 
 ## 🛠️ Tech Stack
 
@@ -158,6 +138,18 @@ Create components in `frontend/src/presentation/components/`
 - Node.js
 - Express.js
 - TypeScript
+
+## 🧪 Key Concepts
+
+### Dependency Rule
+Dependencies always point inward. The inner layers (Domain) know nothing about outer layers (Infrastructure, Presentation).
+
+```
+Presentation → Application → Domain ← Infrastructure
+```
+
+### Repository Pattern
+Domain defines interfaces (`IDataStore`), Infrastructure provides implementations (`InMemoryStore`).
 
 ## 📝 License
 
