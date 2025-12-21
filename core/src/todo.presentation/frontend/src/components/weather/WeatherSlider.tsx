@@ -3,20 +3,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { LocationIcon } from '../icons';
-
-interface WeatherData {
-  location: string;
-  country: string;
-  temperature: number;
-  feelsLike: number;
-  humidity: number;
-  description: string;
-  icon: string;
-  windSpeed: number;
-  timestamp: string;
-}
-
-const API_BASE_URL = 'http://localhost:3001/api';
+import { useWeatherSouthAfrica } from '../../hooks';
 
 // Map OpenWeatherMap icons to weather conditions for styling
 const getWeatherGradient = (icon: string): string => {
@@ -43,29 +30,10 @@ const getWeatherEmoji = (icon: string): string => {
 };
 
 export function WeatherSlider() {
-  const [weatherData, setWeatherData] = useState<WeatherData[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [direction, setDirection] = useState(1); 
+  const [direction, setDirection] = useState(1);
 
-  useEffect(() => {
-    const fetchWeather = async () => {
-      try {
-        setIsLoading(true);
-        const response = await fetch(`${API_BASE_URL}/weather/south-africa`);
-        if (!response.ok) throw new Error('Failed to fetch weather');
-        const result = await response.json();
-        setWeatherData(result.data || []);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to load weather');
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchWeather();
-  }, []);
+  const { data: weatherData = [], isLoading, error } = useWeatherSouthAfrica();
 
   useEffect(() => {
     if (weatherData.length === 0) return;

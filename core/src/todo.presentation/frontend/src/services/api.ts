@@ -8,6 +8,18 @@ export interface ApiResponse<T> {
   error?: string;
 }
 
+export interface WeatherData {
+  location: string;
+  country: string;
+  temperature: number;
+  feelsLike: number;
+  humidity: number;
+  description: string;
+  icon: string;
+  windSpeed: number;
+  timestamp: string;
+}
+
 export const todoApi = {
   getAll: async (): Promise<Todo[]> => {
     const response = await fetch(`${API_BASE_URL}/todos`);
@@ -43,5 +55,21 @@ export const todoApi = {
       method: 'DELETE',
     });
     if (!response.ok) throw new Error('Failed to delete todo');
+  },
+};
+
+export const weatherApi = {
+  getSouthAfrica: async (): Promise<WeatherData[]> => {
+    const response = await fetch(`${API_BASE_URL}/weather/south-africa`);
+    if (!response.ok) throw new Error('Failed to fetch weather');
+    const result: ApiResponse<WeatherData[]> = await response.json();
+    return result.data || [];
+  },
+
+  getByCity: async (city: string): Promise<WeatherData> => {
+    const response = await fetch(`${API_BASE_URL}/weather/${encodeURIComponent(city)}`);
+    if (!response.ok) throw new Error('Failed to fetch weather for city');
+    const result: ApiResponse<WeatherData> = await response.json();
+    return result.data;
   },
 };

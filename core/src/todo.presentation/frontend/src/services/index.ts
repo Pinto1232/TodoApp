@@ -1,2 +1,2 @@
-export { todoApi } from './api';
-export type { ApiResponse } from './api';
+export { todoApi, weatherApi } from './api';
+export type { ApiResponse, WeatherData } from './api';
