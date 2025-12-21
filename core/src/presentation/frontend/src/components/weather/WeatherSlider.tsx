@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { LocationIcon } from '../icons';
 
 interface WeatherData {
@@ -46,7 +47,7 @@ export function WeatherSlider() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const sliderRef = useRef<HTMLDivElement>(null);
+  const [direction, setDirection] = useState(1); // 1 for next, -1 for prev
 
   // Fetch South Africa weather data
   useEffect(() => {
@@ -74,6 +75,7 @@ export function WeatherSlider() {
     if (weatherData.length === 0) return;
 
     const interval = setInterval(() => {
+      setDirection(1);
       setCurrentIndex((prev) => (prev + 1) % weatherData.length);
     }, 5000);
 
@@ -81,14 +83,17 @@ export function WeatherSlider() {
   }, [weatherData.length]);
 
   const goToSlide = (index: number) => {
+    setDirection(index > currentIndex ? 1 : -1);
     setCurrentIndex(index);
   };
 
   const goToPrev = () => {
+    setDirection(-1);
     setCurrentIndex((prev) => (prev - 1 + weatherData.length) % weatherData.length);
   };
 
   const goToNext = () => {
+    setDirection(1);
     setCurrentIndex((prev) => (prev + 1) % weatherData.length);
   };
 
@@ -116,96 +121,216 @@ export function WeatherSlider() {
   const day = currentDate.getDate();
   const month = currentDate.toLocaleDateString('en-US', { month: 'long' });
 
+  // Slide animation variants
+  const slideVariants = {
+    enter: (direction: number) => ({
+      x: direction > 0 ? 300 : -300,
+      opacity: 0,
+      scale: 0.9,
+    }),
+    center: {
+      x: 0,
+      opacity: 1,
+      scale: 1,
+    },
+    exit: (direction: number) => ({
+      x: direction > 0 ? -300 : 300,
+      opacity: 0,
+      scale: 0.9,
+    }),
+  };
+
+  // Floating animation for weather emoji
+  const floatVariants = {
+    animate: {
+      y: [0, -10, 0],
+      rotate: [0, 5, -5, 0],
+      transition: {
+        duration: 4,
+        repeat: Infinity,
+        ease: 'easeInOut' as const,
+      },
+    },
+  };
+
+  // Stagger animation for weather details
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.2,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: { duration: 0.4, ease: 'easeOut' as const },
+    },
+  };
+
   return (
     <div className="relative">
       {/* Main Weather Card */}
-      <div
-        ref={sliderRef}
-        className={`relative bg-gradient-to-r ${getWeatherGradient(currentWeather.icon)} rounded-xl p-6 overflow-hidden transition-all duration-500`}
-      >
-        {/* Weather emoji decoration */}
-        <div className="absolute top-4 right-4 text-4xl opacity-80">
-          {getWeatherEmoji(currentWeather.icon)}
+      <div className={`relative bg-gradient-to-r ${getWeatherGradient(currentWeather.icon)} rounded-xl overflow-hidden min-h-[200px]`}>
+        {/* Animated background particles */}
+        <div className="absolute inset-0 overflow-hidden">
+          {[...Array(6)].map((_, i) => (
+            <motion.div
+              key={i}
+              className="absolute w-2 h-2 bg-white/20 rounded-full"
+              initial={{ x: Math.random() * 300, y: 200 }}
+              animate={{
+                y: -20,
+                x: Math.random() * 300,
+                opacity: [0, 1, 0],
+              }}
+              transition={{
+                duration: 3 + Math.random() * 2,
+                repeat: Infinity,
+                delay: i * 0.5,
+                ease: 'linear',
+              }}
+            />
+          ))}
         </div>
+
+        <AnimatePresence mode="wait" custom={direction}>
+          <motion.div
+            key={currentIndex}
+            custom={direction}
+            variants={slideVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            transition={{ duration: 0.4, ease: 'easeInOut' }}
+            className="p-6"
+          >
+            {/* Weather emoji decoration with float animation */}
+            <motion.div
+              className="absolute top-4 right-4 text-5xl"
+              variants={floatVariants}
+              animate="animate"
+            >
+              {getWeatherEmoji(currentWeather.icon)}
+            </motion.div>
+
+            <motion.div
+              variants={containerVariants}
+              initial="hidden"
+              animate="visible"
+            >
+              {/* Temperature with count-up effect */}
+              <motion.div 
+                className="flex items-end gap-2"
+                variants={itemVariants}
+              >
+                <motion.span
+                  className="text-6xl font-light text-white"
+                  initial={{ scale: 0.5, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ type: 'spring', stiffness: 200, damping: 15 }}
+                >
+                  {Math.round(currentWeather.temperature)}
+                </motion.span>
+                <span className="text-2xl text-white mb-2">°C</span>
+              </motion.div>
+
+              {/* Weather description */}
+              <motion.p 
+                className="text-white/90 text-sm capitalize mt-1"
+                variants={itemVariants}
+              >
+                {currentWeather.description}
+              </motion.p>
+
+              {/* Date and location */}
+              <motion.div className="text-white mt-3" variants={itemVariants}>
+                <p className="font-medium">
+                  {dayName}, {day} {month}
+                </p>
+                <p className="flex items-center gap-1 text-sm opacity-90">
+                  <LocationIcon className="w-4 h-4" />
+                  {currentWeather.location}, South Africa
+                </p>
+              </motion.div>
+
+              {/* Weather details */}
+              <motion.div 
+                className="flex gap-4 mt-4 text-white/80 text-xs"
+                variants={itemVariants}
+              >
+                <motion.span whileHover={{ scale: 1.1 }}>💧 {currentWeather.humidity}%</motion.span>
+                <motion.span whileHover={{ scale: 1.1 }}>🌡️ Feels like {Math.round(currentWeather.feelsLike)}°</motion.span>
+                <motion.span whileHover={{ scale: 1.1 }}>💨 {currentWeather.windSpeed} m/s</motion.span>
+              </motion.div>
+            </motion.div>
+          </motion.div>
+        </AnimatePresence>
 
         {/* Navigation arrows */}
-        <button
+        <motion.button
           onClick={goToPrev}
-          className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center text-white transition-colors"
+          className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center text-white transition-colors z-10"
           aria-label="Previous city"
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.95 }}
         >
           ‹
-        </button>
-        <button
+        </motion.button>
+        <motion.button
           onClick={goToNext}
-          className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center text-white transition-colors"
+          className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center text-white transition-colors z-10"
           aria-label="Next city"
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.95 }}
         >
           ›
-        </button>
-
-        {/* Temperature */}
-        <div className="flex items-end gap-2">
-          <span className="text-6xl font-light text-white">
-            {Math.round(currentWeather.temperature)}
-          </span>
-          <span className="text-2xl text-white mb-2">°C</span>
-        </div>
-
-        {/* Weather description */}
-        <p className="text-white/90 text-sm capitalize mt-1">
-          {currentWeather.description}
-        </p>
-
-        {/* Date and location */}
-        <div className="text-white mt-3">
-          <p className="font-medium">
-            {dayName}, {day} {month}
-          </p>
-          <p className="flex items-center gap-1 text-sm opacity-90">
-            <LocationIcon className="w-4 h-4" />
-            {currentWeather.location}, South Africa
-          </p>
-        </div>
-
-        {/* Weather details */}
-        <div className="flex gap-4 mt-4 text-white/80 text-xs">
-          <span>💧 {currentWeather.humidity}%</span>
-          <span>🌡️ Feels like {Math.round(currentWeather.feelsLike)}°</span>
-          <span>💨 {currentWeather.windSpeed} m/s</span>
-        </div>
+        </motion.button>
       </div>
 
       {/* Dot indicators */}
       <div className="flex justify-center gap-2 mt-3">
         {weatherData.map((_, index) => (
-          <button
+          <motion.button
             key={index}
             onClick={() => goToSlide(index)}
-            className={`w-2 h-2 rounded-full transition-all duration-300 ${
+            className={`h-2 rounded-full ${
               index === currentIndex
-                ? 'bg-amber-500 w-6'
+                ? 'bg-amber-500'
                 : 'bg-gray-400 hover:bg-gray-500'
             }`}
+            animate={{ width: index === currentIndex ? 24 : 8 }}
+            transition={{ duration: 0.3 }}
+            whileHover={{ scale: 1.2 }}
             aria-label={`Go to ${weatherData[index]?.location}`}
           />
         ))}
       </div>
 
-      {/* City name labels (visible on hover) */}
+      {/* City name labels */}
       <div className="flex justify-center gap-1 mt-2 flex-wrap">
         {weatherData.map((city, index) => (
-          <button
+          <motion.button
             key={city.location}
             onClick={() => goToSlide(index)}
-            className={`text-xs px-2 py-1 rounded-full transition-all ${
+            className={`text-xs px-2 py-1 rounded-full ${
               index === currentIndex
                 ? 'bg-amber-500 text-white'
-                : 'bg-gray-200 text-gray-600 hover:bg-gray-300'
+                : 'bg-gray-200 text-gray-600'
             }`}
+            whileHover={{ scale: 1.05, y: -2 }}
+            whileTap={{ scale: 0.95 }}
+            animate={index === currentIndex ? { scale: [1, 1.05, 1] } : {}}
+            transition={{ duration: 0.3 }}
           >
             {city.location}
-          </button>
+          </motion.button>
         ))}
       </div>
     </div>
