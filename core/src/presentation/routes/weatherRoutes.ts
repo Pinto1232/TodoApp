@@ -30,9 +30,37 @@ const SOUTH_AFRICAN_CITIES = [
 ];
 
 /**
- * GET /api/weather
- * Get current weather for a location
- * Query params: city (optional, defaults to Kaduna)
+ * @swagger
+ * /api/weather:
+ *   get:
+ *     summary: Get current weather for a location
+ *     tags: [Weather]
+ *     parameters:
+ *       - in: query
+ *         name: city
+ *         schema:
+ *           type: string
+ *         description: City name (defaults to Kaduna)
+ *         example: Cape Town
+ *     responses:
+ *       200:
+ *         description: Weather data for the specified city
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 data:
+ *                   $ref: '#/components/schemas/Weather'
+ *       500:
+ *         description: Server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  */
 router.get('/', async (req: Request, res: Response) => {
   try {
@@ -56,8 +84,35 @@ router.get('/', async (req: Request, res: Response) => {
 });
 
 /**
- * GET /api/weather/south-africa
- * Get current weather for all major South African cities
+ * @swagger
+ * /api/weather/south-africa:
+ *   get:
+ *     summary: Get weather for all major South African cities
+ *     tags: [Weather]
+ *     responses:
+ *       200:
+ *         description: Weather data for 10 major South African cities
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Weather'
+ *                 count:
+ *                   type: number
+ *                   example: 10
+ *       500:
+ *         description: Server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  */
 router.get('/south-africa', async (_req: Request, res: Response) => {
   try {
@@ -82,9 +137,49 @@ router.get('/south-africa', async (_req: Request, res: Response) => {
 });
 
 /**
- * GET /api/weather/multi
- * Get weather for multiple cities
- * Query params: cities (comma-separated list)
+ * @swagger
+ * /api/weather/multi:
+ *   get:
+ *     summary: Get weather for multiple cities
+ *     tags: [Weather]
+ *     parameters:
+ *       - in: query
+ *         name: cities
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Comma-separated list of city names
+ *         example: London,Paris,Berlin
+ *     responses:
+ *       200:
+ *         description: Weather data for the specified cities
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Weather'
+ *                 count:
+ *                   type: number
+ *                   example: 3
+ *       400:
+ *         description: Missing cities parameter
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       500:
+ *         description: Server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  */
 router.get('/multi', async (req: Request, res: Response) => {
   try {
