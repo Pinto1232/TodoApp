@@ -10,6 +10,7 @@ import {
   TodoList,
   WeatherSlider,
   ConfirmSnackbar,
+  Snackbar,
 } from '../components';
 import { useTodos, useAddTodo, useUpdateTodo, useDeleteTodo, todoKeys } from '../hooks';
 import type { Todo } from '../components';
@@ -21,6 +22,11 @@ export default function Home() {
     todoId: null,
     todoText: '',
   });
+  const [snackbar, setSnackbar] = useState<{ isOpen: boolean; message: string; variant: 'success' | 'error' | 'info' }>({
+    isOpen: false,
+    message: '',
+    variant: 'success',
+  });
 
   const queryClient = useQueryClient();
   const { data: todos = [], isLoading, error } = useTodos();
@@ -29,7 +35,11 @@ export default function Home() {
   const deleteTodoMutation = useDeleteTodo();
 
   const addTodo = (text: string) => {
-    addTodoMutation.mutate(text);
+    addTodoMutation.mutate(text, {
+      onSuccess: () => {
+        setSnackbar({ isOpen: true, message: 'Todo added successfully!', variant: 'success' });
+      },
+    });
   };
 
   const toggleTodo = (id: string) => {
@@ -164,6 +174,13 @@ export default function Home() {
         message={`Delete "${deleteConfirm.todoText}"?`}
         onConfirm={confirmDelete}
         onCancel={cancelDelete}
+      />
+
+      <Snackbar
+        isOpen={snackbar.isOpen}
+        message={snackbar.message}
+        variant={snackbar.variant}
+        onClose={() => setSnackbar((prev) => ({ ...prev, isOpen: false }))}
       />
     </main>
   );

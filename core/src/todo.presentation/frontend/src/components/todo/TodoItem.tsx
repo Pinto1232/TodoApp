@@ -59,7 +59,7 @@ export function TodoItem({ todo, onToggle, onDelete, onUpdate }: TodoItemProps) 
     <div
       ref={setNodeRef}
       style={style}
-      className={`flex items-center justify-between py-3 border-b border-[#d4d4d4] last:border-b-0 bg-[#F1ECE6] ${isDragging ? 'z-10' : ''}`}
+      className={`group flex items-center justify-between py-3 px-3 -mx-3 border-b border-[#d4d4d4] last:border-b-0 bg-[#F1ECE6] rounded-lg transition-all duration-300 ease-out cursor-pointer hover:bg-gradient-to-r hover:from-amber-50 hover:to-orange-50 hover:shadow-md hover:scale-[1.02] hover:border-amber-200 hover:-translate-y-0.5 ${isDragging ? 'z-10 shadow-lg scale-105' : ''}`}
     >
       <div className="flex items-center gap-3 flex-1">
         <button
@@ -101,11 +101,11 @@ export function TodoItem({ todo, onToggle, onDelete, onUpdate }: TodoItemProps) 
           </span>
         )}
       </div>
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 opacity-60 group-hover:opacity-100 transition-opacity duration-300">
         {!isEditing && (
           <button
             onClick={() => setIsEditing(true)}
-            className="text-gray-400 hover:text-amber-500 transition-colors"
+            className="text-gray-400 hover:text-amber-500 hover:scale-110 transition-all duration-200"
             aria-label="Edit todo"
           >
             <EditIcon className="w-5 h-5" />
@@ -114,7 +114,7 @@ export function TodoItem({ todo, onToggle, onDelete, onUpdate }: TodoItemProps) 
         {todo.completed && (
           <button
             onClick={() => onDelete(todo.id)}
-            className="text-red-300 hover:text-red-500 transition-colors"
+            className="text-red-300 hover:text-red-500 hover:scale-110 transition-all duration-200"
             aria-label="Delete todo"
           >
             <TrashIcon className="w-5 h-5" />

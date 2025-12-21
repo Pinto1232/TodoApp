@@ -38,6 +38,9 @@ coverage/
 # TypeScript
 *.tsbuildinfo
 
+# Data files (persistent storage)
+data/
+
 # Tool-specific folders
 .qodo/
 .zencoder/

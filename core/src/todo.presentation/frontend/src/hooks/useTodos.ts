@@ -20,8 +20,8 @@ export function useAddTodo() {
   return useMutation({
     mutationFn: todoApi.create,
     onSuccess: (newTodo) => {
-      queryClient.setQueryData<Todo[]>(todoKeys.list(), (old) => 
-        old ? [...old, newTodo] : [newTodo]
+      queryClient.setQueryData<Todo[]>(todoKeys.list(), (old) =>
+        old ? [...old, newTodo] : [newTodo],
       );
     },
   });
@@ -35,7 +35,7 @@ export function useUpdateTodo() {
       todoApi.update(id, data),
     onSuccess: (updatedTodo) => {
       queryClient.setQueryData<Todo[]>(todoKeys.list(), (old) =>
-        old?.map((todo) => (todo.id === updatedTodo.id ? updatedTodo : todo))
+        old?.map((todo) => (todo.id === updatedTodo.id ? updatedTodo : todo)),
       );
     },
   });
@@ -48,7 +48,7 @@ export function useDeleteTodo() {
     mutationFn: todoApi.delete,
     onSuccess: (_, deletedId) => {
       queryClient.setQueryData<Todo[]>(todoKeys.list(), (old) =>
-        old?.filter((todo) => todo.id !== deletedId)
+        old?.filter((todo) => todo.id !== deletedId),
       );
     },
   });

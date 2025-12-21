@@ -1,21 +1,26 @@
 import { Todo, CreateTodoDTO, createTodo } from '../../todo.domain/entities';
 import { ITodoRepository } from '../../todo.domain/repositories';
-import { InMemoryStore } from './InMemoryStore';
+import { JsonFileStore } from './JsonFileStore';
 
 /**
- * In-Memory Todo Repository Implementation
+ * Persistent Todo Repository Implementation
  *
- * Implements ITodoRepository using InMemoryStore.
+ * Implements ITodoRepository using JsonFileStore for permanent storage.
+ * Data is saved to a JSON file and persists across server restarts.
  *
  * Follows: Single Responsibility Principle (SRP)
  * Follows: Liskov Substitution Principle (LSP)
  */
 export class TodoRepository implements ITodoRepository {
-  private store: InMemoryStore<Todo>;
+  private store: JsonFileStore<Todo>;
 
   constructor() {
-    this.store = new InMemoryStore<Todo>();
-    this.seedData();
+    this.store = new JsonFileStore<Todo>('todos.json');
+    
+    // Only seed data if store is empty (first run)
+    if (this.store.count() === 0) {
+      this.seedData();
+    }
   }
 
   /**
