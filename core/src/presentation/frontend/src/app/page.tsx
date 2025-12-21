@@ -7,7 +7,7 @@ import {
   TodoInput,
   TodoFilter,
   TodoList,
-  WeatherWidget,
+  WeatherSlider,
   Todo,
   ConfirmSnackbar,
 } from '../components';
@@ -90,6 +90,26 @@ export default function Home() {
     }
   };
 
+  // Update todo text via API
+  const updateTodo = async (id: string, text: string) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/todos/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text }),
+      });
+      if (!response.ok) throw new Error('Failed to update todo');
+      const result = await response.json();
+      setTodos((prev) =>
+        prev.map((t) => (t.id === id ? result.data : t))
+      );
+      console.log('✏️ Todo updated:', result.data);
+    } catch (err) {
+      console.error('❌ Error updating todo:', err);
+      setError(err instanceof Error ? err.message : 'Failed to update todo');
+    }
+  };
+
   // Delete todo via API
   const deleteTodo = (id: string) => {
     const todo = todos.find((t) => t.id === id);
@@ -120,6 +140,23 @@ export default function Home() {
   // Cancel delete
   const cancelDelete = () => {
     setDeleteConfirm({ isOpen: false, todoId: null, todoText: '' });
+  };
+
+  // Reorder todos by drag and drop
+  const reorderTodos = (activeId: string, overId: string) => {
+    setTodos((prev) => {
+      const oldIndex = prev.findIndex((t) => t.id === activeId);
+      const newIndex = prev.findIndex((t) => t.id === overId);
+
+      if (oldIndex === -1 || newIndex === -1) return prev;
+
+      const newTodos = [...prev];
+      const [removed] = newTodos.splice(oldIndex, 1);
+      newTodos.splice(newIndex, 0, removed);
+
+      console.log('🔄 Todos reordered');
+      return newTodos;
+    });
   };
 
   const filteredTodos = hideCompleted
@@ -161,11 +198,13 @@ export default function Home() {
               todos={filteredTodos}
               onToggle={toggleTodo}
               onDelete={deleteTodo}
+              onUpdate={updateTodo}
+              onReorder={reorderTodos}
               emptyMessage="No todos yet. Add one above!"
             />
           )}
 
-          <WeatherWidget />
+          <WeatherSlider />
         </Card>
       </div>
 

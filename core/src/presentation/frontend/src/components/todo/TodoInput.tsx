@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, KeyboardEvent } from 'react';
-import { Button, Input } from '../ui';
 
 interface TodoInputProps {
   onAdd: (text: string) => void;
@@ -28,15 +27,21 @@ export function TodoInput({
   };
 
   return (
-    <div className="flex gap-2 mb-2">
-      <Input
+    <div className="flex items-stretch bg-[#F1ECE6] rounded-xl overflow-hidden mb-4">
+      <input
         type="text"
         value={inputValue}
         onChange={(e) => setInputValue(e.target.value)}
         onKeyPress={handleKeyPress}
         placeholder={placeholder}
+        className="flex-1 px-5 py-4 bg-transparent text-gray-700 placeholder-gray-400 focus:outline-none text-base"
       />
-      <Button onClick={handleAdd}>ADD</Button>
+      <button
+        onClick={handleAdd}
+        className="px-6 bg-[#7fb3b5] hover:bg-[#6a9fa1] text-white font-semibold text-sm tracking-wide transition-colors"
+      >
+        ADD
+      </button>
     </div>
   );
 }
