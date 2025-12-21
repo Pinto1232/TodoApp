@@ -10,46 +10,48 @@ This project follows Clean Architecture with a **unified core** approach, where 
 TodoApp/
 ├── .gitignore
 ├── README.md
-└── core/                           # Unified application core
-    ├── package.json                # Backend dependencies & scripts
-    ├── tsconfig.json               # TypeScript configuration
-    ├── jest.config.js              # Jest test configuration
-    ├── .env                        # Environment variables (create from .env.example)
-    ├── .env.example                # Environment template
+└── core/                              # Unified application core
+    ├── package.json                   # Backend dependencies & scripts
+    ├── tsconfig.json                  # TypeScript configuration
+    ├── jest.config.js                 # Jest test configuration
+    ├── .env                           # Environment variables (create from .env.example)
+    ├── .env.example                   # Environment template
     └── src/
-        ├── app.ts                  # Express application setup
-        ├── index.ts                # Server entry point
+        ├── app.ts                     # Express application setup
+        ├── index.ts                   # Server entry point
         │
-        ├── domain/                 # 🎯 Enterprise Business Rules
-        │   ├── entities/           # Business entities (Todo, User, etc.)
-        │   └── repositories/       # Repository interfaces (contracts)
+        ├── todo.domain/               # 🎯 Enterprise Business Rules
+        │   ├── entities/              # Business entities (Todo, Weather)
+        │   └── repositories/          # Repository interfaces (contracts)
         │
-        ├── application/            # 🔧 Application Business Rules
-        │   └── use-cases/          # Use cases / interactors
+        ├── todo.application/          # 🔧 Application Business Rules
+        │   └── use-cases/             # Use cases / interactors
         │
-        ├── infrastructure/         # 🔌 Frameworks & Drivers
-        │   └── database/           # Data store implementations
-        │       └── InMemoryStore.ts
+        ├── todo.infrastructure/       # 🔌 Frameworks & Drivers
+        │   ├── database/              # Data store implementations
+        │   └── external/              # External service implementations
         │
-        ├── presentation/           # 🖥️ Interface Adapters
-        │   └── frontend/           # Next.js Frontend Application
+        ├── todo.presentation/         # 🖥️ Interface Adapters
+        │   ├── routes/                # API route handlers
+        │   └── frontend/              # Next.js Frontend Application
         │       ├── package.json
         │       ├── next.config.js
         │       ├── tailwind.config.js
         │       └── src/
-        │           └── app/        # Next.js App Router
+        │           └── app/           # Next.js App Router
         │
-        └── shared/                 # 🛠️ Shared utilities & DI container
+        └── todo.shared/               # 🛠️ Shared utilities (config, logger, swagger)
 ```
 
 ### Clean Architecture Layers
 
 | Layer | Directory | Responsibility |
 |-------|-----------|----------------|
-| **Domain** | `core/src/domain/` | Business entities, repository interfaces |
-| **Application** | `core/src/application/` | Use cases, business logic orchestration |
-| **Infrastructure** | `core/src/infrastructure/` | Database, external services implementations |
-| **Presentation** | `core/src/presentation/` | UI (Next.js frontend), API controllers |
+| **Domain** | `core/src/todo.domain/` | Business entities, repository interfaces |
+| **Application** | `core/src/todo.application/` | Use cases, business logic orchestration |
+| **Infrastructure** | `core/src/todo.infrastructure/` | Database, external services implementations |
+| **Presentation** | `core/src/todo.presentation/` | UI (Next.js frontend), API routes |
+| **Shared** | `core/src/todo.shared/` | Configuration, logging, Swagger setup |
 
 ## 🎯 SOLID Principles
 
@@ -79,7 +81,7 @@ cd core
 npm install
 
 # Install frontend dependencies
-cd src/presentation/frontend
+cd src/todo.presentation/frontend
 npm install
 ```
 
@@ -114,7 +116,7 @@ The backend server will start at **http://localhost:3001**
 ### Frontend (Next.js)
 
 ```bash
-cd core/src/presentation/frontend
+cd core/src/todo.presentation/frontend
 npm run dev
 ```
 
@@ -190,35 +192,38 @@ npm test
 ## 📁 Building Features Step by Step
 
 ### 1. Define Domain Entity
-Create your entity in `core/src/domain/entities/`
+Create your entity in `core/src/todo.domain/entities/`
 
 ### 2. Define Repository Interface
-Create interface in `core/src/domain/repositories/`
+Create interface in `core/src/todo.domain/repositories/`
 
 ### 3. Implement Use Case
-Create business logic in `core/src/application/use-cases/`
+Create business logic in `core/src/todo.application/use-cases/`
 
 ### 4. Implement Repository
-Create implementation in `core/src/infrastructure/database/`
+Create implementation in `core/src/todo.infrastructure/database/`
 
 ### 5. Create Controller & Routes
-Add HTTP handlers in `core/src/presentation/` (for API endpoints)
+Add HTTP handlers in `core/src/todo.presentation/routes/`
 
 ### 6. Build UI Components (Frontend)
-Create components in `core/src/presentation/frontend/src/`
+Create components in `core/src/todo.presentation/frontend/src/components/`
 
 ## 🛠️ Tech Stack
 
 ### Frontend
-- Next.js 14 (App Router)
-- React 18
+- Next.js 15 (App Router)
+- React 19
 - TypeScript
 - Tailwind CSS
+- Framer Motion (animations)
+- dnd-kit (drag & drop)
 
 ### Backend
 - Node.js
 - Express.js
 - TypeScript
+- tsx (fast TypeScript execution)
 
 ## 🧪 Key Concepts
 
