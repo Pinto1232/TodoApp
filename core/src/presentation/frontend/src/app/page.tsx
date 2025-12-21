@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import {
   Card,
   PageHeader,
@@ -9,70 +9,117 @@ import {
   TodoList,
   WeatherWidget,
   Todo,
+  ConfirmSnackbar,
 } from '../components';
 
 const API_BASE_URL = 'http://localhost:3001/api';
 
 export default function Home() {
-  const [todos, setTodos] = useState<Todo[]>([
-    { id: 1, text: 'Personal Work No. 1', completed: true },
-    { id: 2, text: 'Personal Work No. 2', completed: false },
-    { id: 3, text: 'Personal Work No. 3', completed: false },
-    { id: 4, text: 'Personal Work No. 4', completed: true },
-    { id: 5, text: 'Personal Work No. 5', completed: false },
-  ]);
+  const [todos, setTodos] = useState<Todo[]>([]);
   const [hideCompleted, setHideCompleted] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [deleteConfirm, setDeleteConfirm] = useState<{ isOpen: boolean; todoId: string | null; todoText: string }>({
+    isOpen: false,
+    todoId: null,
+    todoText: '',
+  });
 
-  // Fetch and log all API endpoint data on mount
-  useEffect(() => {
-    const fetchAllData = async () => {
-      try {
-        // Fetch Todos
-        console.log('📋 Fetching Todos...');
-        const todosResponse = await fetch(`${API_BASE_URL}/todos`);
-        const todosData = await todosResponse.json();
-        console.log('✅ Todos:', todosData);
-
-        // Fetch Weather (default city)
-        console.log('🌤️ Fetching Weather (default)...');
-        const weatherResponse = await fetch(`${API_BASE_URL}/weather`);
-        const weatherData = await weatherResponse.json();
-        console.log('✅ Weather:', weatherData);
-
-        // Fetch South Africa Weather
-        console.log('🇿🇦 Fetching South Africa Weather...');
-        const saWeatherResponse = await fetch(`${API_BASE_URL}/weather/south-africa`);
-        const saWeatherData = await saWeatherResponse.json();
-        console.log('✅ South Africa Weather:', saWeatherData);
-
-        // Log summary
-        console.log('📊 API Data Summary:', {
-          todos: todosData,
-          weather: weatherData,
-          southAfricaWeather: saWeatherData,
-        });
-      } catch (error) {
-        console.error('❌ Error fetching API data:', error);
-      }
-    };
-
-    fetchAllData();
+  // Fetch todos from API
+  const fetchTodos = useCallback(async () => {
+    try {
+      setIsLoading(true);
+      setError(null);
+      const response = await fetch(`${API_BASE_URL}/todos`);
+      if (!response.ok) throw new Error('Failed to fetch todos');
+      const result = await response.json();
+      // API returns { success, data, count } wrapper
+      setTodos(result.data || []);
+      console.log('📋 Todos loaded:', result.data);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to load todos');
+      console.error('❌ Error fetching todos:', err);
+    } finally {
+      setIsLoading(false);
+    }
   }, []);
 
-  const addTodo = (text: string) => {
-    setTodos([...todos, { id: Date.now(), text, completed: false }]);
+  // Load todos on mount
+  useEffect(() => {
+    fetchTodos();
+  }, [fetchTodos]);
+
+  // Add todo via API
+  const addTodo = async (text: string) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/todos`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text }),
+      });
+      if (!response.ok) throw new Error('Failed to add todo');
+      const result = await response.json();
+      setTodos((prev) => [...prev, result.data]);
+      console.log('✅ Todo added:', result.data);
+    } catch (err) {
+      console.error('❌ Error adding todo:', err);
+      setError(err instanceof Error ? err.message : 'Failed to add todo');
+    }
   };
 
-  const toggleTodo = (id: number) => {
-    setTodos(
-      todos.map((todo) =>
-        todo.id === id ? { ...todo, completed: !todo.completed } : todo
-      )
-    );
+  // Toggle todo via API
+  const toggleTodo = async (id: string) => {
+    const todo = todos.find((t) => t.id === id);
+    if (!todo) return;
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/todos/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ completed: !todo.completed }),
+      });
+      if (!response.ok) throw new Error('Failed to update todo');
+      const result = await response.json();
+      setTodos((prev) =>
+        prev.map((t) => (t.id === id ? result.data : t))
+      );
+      console.log('✅ Todo toggled:', result.data);
+    } catch (err) {
+      console.error('❌ Error toggling todo:', err);
+      setError(err instanceof Error ? err.message : 'Failed to update todo');
+    }
   };
 
-  const deleteTodo = (id: number) => {
-    setTodos(todos.filter((todo) => todo.id !== id));
+  // Delete todo via API
+  const deleteTodo = (id: string) => {
+    const todo = todos.find((t) => t.id === id);
+    if (!todo) return;
+    setDeleteConfirm({ isOpen: true, todoId: id, todoText: todo.text });
+  };
+
+  // Confirm delete
+  const confirmDelete = async () => {
+    const id = deleteConfirm.todoId;
+    if (!id) return;
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/todos/${id}`, {
+        method: 'DELETE',
+      });
+      if (!response.ok) throw new Error('Failed to delete todo');
+      setTodos((prev) => prev.filter((t) => t.id !== id));
+      console.log('🗑️ Todo deleted:', id);
+    } catch (err) {
+      console.error('❌ Error deleting todo:', err);
+      setError(err instanceof Error ? err.message : 'Failed to delete todo');
+    } finally {
+      setDeleteConfirm({ isOpen: false, todoId: null, todoText: '' });
+    }
+  };
+
+  // Cancel delete
+  const cancelDelete = () => {
+    setDeleteConfirm({ isOpen: false, todoId: null, todoText: '' });
   };
 
   const filteredTodos = hideCompleted
@@ -92,15 +139,42 @@ export default function Home() {
             onToggle={() => setHideCompleted(!hideCompleted)}
           />
 
-          <TodoList
-            todos={filteredTodos}
-            onToggle={toggleTodo}
-            onDelete={deleteTodo}
-          />
+          {error && (
+            <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+              {error}
+              <button
+                onClick={() => setError(null)}
+                className="float-right font-bold"
+              >
+                ×
+              </button>
+            </div>
+          )}
+
+          {isLoading ? (
+            <div className="text-center py-8 text-gray-400">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-amber-500 mx-auto mb-2"></div>
+              Loading todos...
+            </div>
+          ) : (
+            <TodoList
+              todos={filteredTodos}
+              onToggle={toggleTodo}
+              onDelete={deleteTodo}
+              emptyMessage="No todos yet. Add one above!"
+            />
+          )}
 
           <WeatherWidget />
         </Card>
       </div>
+
+      <ConfirmSnackbar
+        isOpen={deleteConfirm.isOpen}
+        message={`Delete "${deleteConfirm.todoText}"?`}
+        onConfirm={confirmDelete}
+        onCancel={cancelDelete}
+      />
     </main>
   );
 }

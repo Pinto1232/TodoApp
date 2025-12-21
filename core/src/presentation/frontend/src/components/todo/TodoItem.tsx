@@ -3,15 +3,15 @@
 import { CheckIcon, TrashIcon } from '../icons';
 
 export interface Todo {
-  id: number;
+  id: string;
   text: string;
   completed: boolean;
 }
 
 interface TodoItemProps {
   todo: Todo;
-  onToggle: (id: number) => void;
-  onDelete: (id: number) => void;
+  onToggle: (id: string) => void;
+  onDelete: (id: string) => void;
 }
 
 export function TodoItem({ todo, onToggle, onDelete }: TodoItemProps) {
