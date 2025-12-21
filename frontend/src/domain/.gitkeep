@@ -1,4 +1,0 @@
-# Domain Layer
-# This layer contains:
-# - entities/     : TypeScript interfaces/types for business entities
-# - repositories/ : Repository interfaces (abstractions)

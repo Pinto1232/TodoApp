@@ -1,5 +1,0 @@
-# Infrastructure Layer
-# This layer contains:
-# - repositories/ : Repository implementations (API calls)
-# - api/          : API client configuration
-# - storage/      : Local storage utilities

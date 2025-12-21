@@ -1,6 +1,0 @@
-# Presentation Layer
-# This layer contains:
-# - controllers/ : HTTP request handlers
-# - routes/      : Express route definitions
-# - middlewares/ : Express middlewares
-# - validators/  : Request validation
