@@ -10,7 +10,11 @@ export const weatherKeys = {
 export function useWeatherSouthAfrica() {
   return useQuery({
     queryKey: weatherKeys.southAfrica(),
-    queryFn: weatherApi.getSouthAfrica,
+    queryFn: async () => {
+      const weatherData = await weatherApi.getSouthAfrica();
+      console.log('🌤️ South Africa Weather Data:', weatherData);
+      return weatherData;
+    },
     staleTime: 5 * 60 * 1000, // 5 minutes - weather doesn't change that often
     refetchInterval: 10 * 60 * 1000, // Refetch every 10 minutes
   });

@@ -10,7 +10,11 @@ export const todoKeys = {
 export function useTodos() {
   return useQuery({
     queryKey: todoKeys.list(),
-    queryFn: todoApi.getAll,
+    queryFn: async () => {
+      const todos = await todoApi.getAll();
+      console.log('📝 Todos Data:', todos);
+      return todos;
+    },
   });
 }
 
