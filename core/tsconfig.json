@@ -15,13 +15,13 @@
     "sourceMap": true,
     "baseUrl": "./src",
     "paths": {
-      "@domain/*": ["domain/*"],
-      "@application/*": ["application/*"],
-      "@infrastructure/*": ["infrastructure/*"],
-      "@presentation/*": ["presentation/*"],
-      "@shared/*": ["shared/*"]
+      "@domain/*": ["todo.domain/*"],
+      "@application/*": ["todo.application/*"],
+      "@infrastructure/*": ["todo.infrastructure/*"],
+      "@presentation/*": ["todo.presentation/*"],
+      "@shared/*": ["todo.shared/*"]
     }
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist", "src/presentation/frontend"]
+  "exclude": ["node_modules", "dist", "src/todo.presentation/frontend"]
 }

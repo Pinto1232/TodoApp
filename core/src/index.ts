@@ -1,6 +1,6 @@
 import 'dotenv/config';
 import { createApp } from './app';
-import { getConfig, validateConfig, createLogger } from './shared';
+import { getConfig, validateConfig, createLogger } from './todo.shared';
 
 const logger = createLogger('Server');
 
