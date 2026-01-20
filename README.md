@@ -117,10 +117,12 @@ The backend server will start at **http://localhost:3001**
 
 ```bash
 cd core/src/todo.presentation/frontend
-npm run dev
+npm run dev:webpack
 ```
 
 The frontend will start at **http://localhost:3000**
+
+Note: `npm run dev` uses Turbopack if you want the faster default.
 
 ### URLs
 
