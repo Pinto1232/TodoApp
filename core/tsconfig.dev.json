@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig.json",
+  "exclude": [
+    "node_modules",
+    "dist",
+    "src/todo.presentation/frontend",
+    "src/**/__tests__/**"
+  ]
+}

@@ -2,18 +2,16 @@
 
 import { useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-import {
-  Card,
-  PageHeader,
-  TodoInput,
-  TodoFilter,
-  TodoList,
-  WeatherSlider,
-  ConfirmSnackbar,
-  Snackbar,
-} from '../components';
-import { useTodos, useAddTodo, useUpdateTodo, useDeleteTodo, todoKeys } from '../hooks';
-import type { Todo } from '../components';
+import { Card } from '../components/ui/Card';
+import { PageHeader } from '../components/layout/PageHeader';
+import { TodoInput } from '../components/todo/TodoInput';
+import { TodoFilter } from '../components/todo/TodoFilter';
+import { TodoList } from '../components/todo/TodoList';
+import { WeatherSlider } from '../components/weather/WeatherSlider';
+import { ConfirmSnackbar } from '../components/ui/ConfirmSnackbar';
+import { Snackbar } from '../components/ui/Snackbar';
+import { useTodos, useAddTodo, useUpdateTodo, useDeleteTodo, todoKeys } from '../hooks/useTodos';
+import type { Todo } from '../types/todo';
 
 export default function Home() {
   const [hideCompleted, setHideCompleted] = useState(false);

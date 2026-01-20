@@ -177,4 +177,11 @@ const options: swaggerJsdoc.Options = {
   apis: ['./src/todo.presentation/routes/*.ts', './src/app.ts'],
 };
 
-export const swaggerSpec = swaggerJsdoc(options);
+let swaggerSpec: ReturnType<typeof swaggerJsdoc> | null = null;
+
+export const getSwaggerSpec = () => {
+  if (!swaggerSpec) {
+    swaggerSpec = swaggerJsdoc(options);
+  }
+  return swaggerSpec;
+};

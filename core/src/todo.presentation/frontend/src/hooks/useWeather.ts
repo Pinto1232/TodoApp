@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { weatherApi } from '../services';
+import { weatherApi } from '../services/api';
 
 export const weatherKeys = {
   all: ['weather'] as const,
@@ -12,7 +12,6 @@ export function useWeatherSouthAfrica() {
     queryKey: weatherKeys.southAfrica(),
     queryFn: async () => {
       const weatherData = await weatherApi.getSouthAfrica();
-      console.log('🌤️ South Africa Weather Data:', weatherData);
       return weatherData;
     },
     staleTime: 5 * 60 * 1000, // 5 minutes - weather doesn't change that often

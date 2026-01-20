@@ -14,7 +14,8 @@ import {
   sortableKeyboardCoordinates,
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
-import { TodoItem, Todo } from './TodoItem';
+import { TodoItem } from './TodoItem';
+import type { Todo } from '../../types/todo';
 
 interface TodoListProps {
   todos: Todo[];

@@ -4,12 +4,9 @@ import { useState, KeyboardEvent } from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { CheckIcon, TrashIcon, EditIcon, DragHandleIcon } from '../icons';
+import type { Todo } from '../../types/todo';
 
-export interface Todo {
-  id: string;
-  text: string;
-  completed: boolean;
-}
+export type { Todo };
 
 interface TodoItemProps {
   todo: Todo;

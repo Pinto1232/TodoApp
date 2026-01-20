@@ -4,7 +4,7 @@ import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import swaggerUi from 'swagger-ui-express';
 import { todoRoutes, weatherRoutes } from './todo.presentation';
-import { swaggerSpec, getConfig, createLogger } from './todo.shared';
+import { getSwaggerSpec, getConfig, createLogger } from './todo.shared';
 
 const logger = createLogger('App');
 
@@ -56,18 +56,25 @@ export const createApp = (): Application => {
     next();
   });
 
-  app.use(
-    '/api/docs',
-    swaggerUi.serve,
-    swaggerUi.setup(swaggerSpec, {
-      customCss: '.swagger-ui .topbar { display: none }',
-      customSiteTitle: 'Todo App API Documentation',
-    }),
-  );
+  let swaggerUiHandler: ReturnType<typeof swaggerUi.setup> | null = null;
+
+  const getSwaggerUiHandler = () => {
+    if (!swaggerUiHandler) {
+      swaggerUiHandler = swaggerUi.setup(getSwaggerSpec(), {
+        customCss: '.swagger-ui .topbar { display: none }',
+        customSiteTitle: 'Todo App API Documentation',
+      });
+    }
+    return swaggerUiHandler;
+  };
+
+  app.use('/api/docs', swaggerUi.serve, (req, res, next) => {
+    return getSwaggerUiHandler()(req, res, next);
+  });
 
   app.get('/api/docs.json', (_req: Request, res: Response) => {
     res.setHeader('Content-Type', 'application/json');
-    res.send(swaggerSpec);
+    res.send(getSwaggerSpec());
   });
 
   /**

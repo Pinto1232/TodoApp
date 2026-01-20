@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { todoApi } from '../services';
-import type { Todo } from '../components';
+import { todoApi } from '../services/api';
+import type { Todo } from '../types/todo';
 
 export const todoKeys = {
   all: ['todos'] as const,
@@ -12,7 +12,6 @@ export function useTodos() {
     queryKey: todoKeys.list(),
     queryFn: async () => {
       const todos = await todoApi.getAll();
-      console.log('📝 Todos Data:', todos);
       return todos;
     },
   });

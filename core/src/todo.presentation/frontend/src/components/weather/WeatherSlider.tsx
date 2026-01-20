@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { LocationIcon } from '../icons';
-import { useWeatherSouthAfrica } from '../../hooks';
+import { useWeatherSouthAfrica } from '../../hooks/useWeather';
 
 // Map OpenWeatherMap icons to weather conditions for styling
 const getWeatherGradient = (icon: string): string => {
