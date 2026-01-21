@@ -1,11 +1,12 @@
+import { InMemoryStore } from '../../../todo.infrastructure/database/InMemoryStore';
 import { TodoRepository } from '../../../todo.infrastructure/database/TodoRepository';
-import { Todo } from '../../../todo.domain/entities/Todo';
+import type { Todo } from '../../../todo.domain/entities/Todo';
 
 describe('TodoRepository', () => {
   let repository: TodoRepository;
 
   beforeEach(() => {
-    repository = new TodoRepository();
+    repository = new TodoRepository(new InMemoryStore<Todo>());
   });
 
   describe('initial state', () => {

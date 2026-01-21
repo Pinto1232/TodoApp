@@ -1,5 +1,5 @@
 import { Todo, CreateTodoDTO, createTodo } from '../../todo.domain/entities';
-import { ITodoRepository } from '../../todo.domain/repositories';
+import { IDataStore, ITodoRepository } from '../../todo.domain/repositories';
 import { JsonFileStore } from './JsonFileStore';
 
 /**
@@ -12,10 +12,10 @@ import { JsonFileStore } from './JsonFileStore';
  * Follows: Liskov Substitution Principle (LSP)
  */
 export class TodoRepository implements ITodoRepository {
-  private store: JsonFileStore<Todo>;
+  private store: IDataStore<Todo>;
 
-  constructor() {
-    this.store = new JsonFileStore<Todo>('todos.json');
+  constructor(store: IDataStore<Todo> = new JsonFileStore<Todo>('todos.json')) {
+    this.store = store;
     
     // Only seed data if store is empty (first run)
     if (this.store.count() === 0) {
