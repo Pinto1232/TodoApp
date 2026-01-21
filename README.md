@@ -225,7 +225,7 @@ Create components in `core/src/todo.presentation/frontend/src/components/`
 - Node.js
 - Express.js
 - TypeScript
-- tsx (fast TypeScript execution)
+- `tsc` + Node `--watch` (automatic rebuild + restart via `scripts/dev.js`)
 
 ## 🧪 Key Concepts
 

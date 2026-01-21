@@ -1,4 +1,4 @@
-import express, { Application, Request, Response } from 'express';
+import express, { Application, Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
@@ -68,7 +68,7 @@ export const createApp = (): Application => {
     return swaggerUiHandler;
   };
 
-  app.use('/api/docs', swaggerUi.serve, (req, res, next) => {
+  app.use('/api/docs', swaggerUi.serve, (req: Request, res: Response, next: NextFunction) => {
     return getSwaggerUiHandler()(req, res, next);
   });
 
