@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { Card } from '../components/ui/Card';
 import { PageHeader } from '../components/layout/PageHeader';
@@ -31,6 +31,11 @@ export default function Home() {
   const addTodoMutation = useAddTodo();
   const updateTodoMutation = useUpdateTodo();
   const deleteTodoMutation = useDeleteTodo();
+
+  useEffect(() => {
+    if (isLoading) return;
+    console.log('[Todos] data', todos);
+  }, [isLoading, todos]);
 
   const addTodo = (text: string) => {
     addTodoMutation.mutate(text, {

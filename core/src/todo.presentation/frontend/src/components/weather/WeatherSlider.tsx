@@ -36,6 +36,11 @@ export function WeatherSlider() {
   const { data: weatherData = [], isLoading, error } = useWeatherSouthAfrica();
 
   useEffect(() => {
+    if (isLoading || error) return;
+    console.log('[Weather] data', weatherData);
+  }, [error, isLoading, weatherData]);
+
+  useEffect(() => {
     if (weatherData.length === 0) return;
 
     const interval = setInterval(() => {
