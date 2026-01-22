@@ -101,7 +101,7 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-[#2d3748] p-4 sm:p-6 md:p-8 lg:p-12">
       <div className="max-w-2xl lg:max-w-3xl mx-auto">
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 sm:gap-0 mb-4">
+        <div className="flex flex-col sm:flex-row justify-between items-center gap-2 sm:gap-0 mb-4 text-center sm:text-left">
           <PageHeader title="To-Do Personal" className="mb-0" />
           <button
             onClick={() => window.open('http://localhost:3001/api/docs', 'API Documentation', 'width=1200,height=800,menubar=no,toolbar=no,location=no,status=no')}
